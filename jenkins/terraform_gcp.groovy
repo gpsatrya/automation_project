@@ -25,6 +25,7 @@ pipeline {
             steps {
                 script {
                     dir('terraform') {
+                        sh 'printenv'
                         sh 'echo $GOOGLE_APPLICATION_CREDENTIALS'
                         // Initialize Terraform
                         sh 'terraform init'
