@@ -54,6 +54,9 @@ pipeline {
             steps {
                 script {
                     dir('terraform') {
+                        // Initialize Terraform (necessary before destroy)
+                        sh 'terraform init'
+
                         // Destroy Terraform-managed infrastructure
                         sh "terraform destroy -var 'google_application_credentials=${GOOGLE_APPLICATION_CREDENTIALS}' -auto-approve"
                     }
