@@ -19,9 +19,6 @@ pipeline {
         }
 
         stage('Terraform Init') {
-            when {
-                expression { params.ACTION == 'init' }
-            }
             steps {
                 script {
                     dir('terraform') {
