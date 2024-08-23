@@ -25,13 +25,11 @@ pipeline {
             steps {
                 script {
                     dir('terraform') {
-                        sh 'printenv'
-                        sh 'echo $GOOGLE_APPLICATION_CREDENTIALS'
                         // Initialize Terraform
                         sh 'terraform init'
 
                         // Apply Terraform configuration to create VM
-                        sh 'terraform apply -auto-approve'
+                        sh 'terraform apply -var 'google_application_credentials=${GOOGLE_APPLICATION_CREDENTIALS}' -auto-approve'
                     }
                 }
             }
@@ -48,7 +46,7 @@ pipeline {
                         sh 'terraform init'
 
                         // Destroy Terraform-managed infrastructure
-                        sh 'terraform destroy -auto-approve'
+                        sh 'terraform destroy -var 'google_application_credentials=${GOOGLE_APPLICATION_CREDENTIALS}' -auto-approve'
                     }
                 }
             }
