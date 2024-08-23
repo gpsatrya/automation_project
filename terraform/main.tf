@@ -1,5 +1,5 @@
 provider "google" {
-  credentials = file("/home/gsatrya/secrets/panji-sandbox-49d7ea9ef84b.json")
+  credentials = file(var.google_application_credentials)
   project     = "panji-sandbox"
   region      = "us-central1"
 }

@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        GOOGLE_APPLICATION_CREDENTIALS = '../../secrets/panji-sandbox-49d7ea9ef84b.json'
+        GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-credentials-json')
     }
 
     stages {
