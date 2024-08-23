@@ -4,6 +4,11 @@ provider "google" {
   region      = "us-central1"
 }
 
+variable "google_application_credentials" {
+  description = "Path to the Google Cloud service account key file"
+  type        = string
+}
+
 resource "google_compute_instance" "default" {
   name         = "automate-instance-1"
   machine_type = "e2-small"
