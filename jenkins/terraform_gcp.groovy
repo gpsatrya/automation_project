@@ -24,11 +24,13 @@ pipeline {
             }
             steps {
                 script {
-                    // Initialize Terraform
-                    sh 'terraform init'
+                    dir('terraform') {
+                        // Initialize Terraform
+                        sh 'terraform init'
 
-                    // Apply Terraform configuration to create VM
-                    sh 'terraform apply -auto-approve'
+                        // Apply Terraform configuration to create VM
+                        sh 'terraform apply -auto-approve'
+                    }
                 }
             }
         }
@@ -39,11 +41,13 @@ pipeline {
             }
             steps {
                 script {
-                    // Initialize Terraform (necessary before destroy)
-                    sh 'terraform init'
+                    dir('terraform') {
+                        // Initialize Terraform (necessary before destroy)
+                        sh 'terraform init'
 
-                    // Destroy Terraform-managed infrastructure
-                    sh 'terraform destroy -auto-approve'
+                        // Destroy Terraform-managed infrastructure
+                        sh 'terraform destroy -auto-approve'
+                    }
                 }
             }
         }
