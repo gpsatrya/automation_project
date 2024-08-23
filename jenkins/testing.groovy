@@ -4,6 +4,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
+                //cloning repo
                 sh 'git config --global http.sslVerify false'
                 git branch:'main', credentialsId: 'credential-github', url: 'https://github.com/gpsatrya/automation_project.git'
             }
