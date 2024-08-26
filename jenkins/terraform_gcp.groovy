@@ -8,7 +8,6 @@ pipeline {
     environment {
         GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-credentials-json')
         TERRAFORM_STATE_PATH = '/var/terraform_state/terraform.tfstate'
-        GPG_KEY_ID = 'gsatrya'
     }
 
     stages {
@@ -17,19 +16,6 @@ pipeline {
                 //cloning repo
                 sh 'git config --global http.sslVerify false'
                 git branch:'main', credentialsId: 'credential-github', url: 'https://github.com/gpsatrya/automation_project.git'
-            }
-        }
-
-        stage('Setup') {
-            steps {
-                script {
-                    sh 'pwd'
-                    sh 'ls ../../../../terraform_state'
-                    sh 'ls /var/'
-                    sh 'ls /home/'
-                    // Decrypt the state file before running Terraform
-                    sh "gpg --output ${TERRAFORM_STATE_PATH} --decrypt ${TERRAFORM_STATE_PATH}.gpg"
-                }
             }
         }
 
@@ -84,9 +70,6 @@ pipeline {
                     dir('terraform') {
                         // Initialize Terraform (necessary before destroy)
                         sh 'terraform init'
-
-                        // Destroy Terraform-managed infrastructure
-                        sh "terraform destroy -var 'google_application_credentials=${GOOGLE_APPLICATION_CREDENTIALS}' -auto-approve -state=${TERRAFORM_STATE_PATH}"
                     }
                 }
             }
@@ -95,8 +78,6 @@ pipeline {
         stage('Cleanup') {
             steps {
                 script {
-                    // Encrypt the state file after running Terraform
-                    sh "gpg --output ${TERRAFORM_STATE_PATH}.gpg --encrypt --recipient ${GPG_KEY_ID} ${TERRAFORM_STATE_PATH}"
                     // Remove the unencrypted state file
                     sh "rm ${TERRAFORM_STATE_PATH}"
                 }
