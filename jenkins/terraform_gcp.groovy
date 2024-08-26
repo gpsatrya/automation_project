@@ -61,10 +61,6 @@ EOF
                     sh '''
 cat ./terraform/terraform-${ACTION}-${BUILD_NUMBER}.tfvars
 '''
-                    sh '''
-ls -la
-pwd
-'''
                 }
             }
         }
