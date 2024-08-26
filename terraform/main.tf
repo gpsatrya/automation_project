@@ -7,15 +7,17 @@ data "google_compute_subnetwork" "subnet" {
   region = var.region 
 }
 
-resource "google_compute_instance" "default" {
+resource "google_compute_instance" "instance" {
   count         = var.instance_count
-  name          = "var.instance_name"
+  name          = "${var.instance_name}-${count.index}"
   machine_type  = var.instance_type
   zone          = var.zone
 
   boot_disk {
     initialize_params {
       image = var.instance_os
+      size  = var.disk_size
+      type  = "pd-balanced"
     }
   }
 
