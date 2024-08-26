@@ -7,7 +7,6 @@ variable "google_application_credentials" {
 variable "id_project" {
   description = "Project ID"
   type        = string
-  default     = "panji-sandbox"
 }
 
 variable "region" {
