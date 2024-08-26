@@ -18,7 +18,7 @@ pipeline {
                             choice(defaultValue: 'us-central1-a', name: 'ZONE', choices: ['us-central1-a', 'us-central1-b', 'us-central1-c', 'us-central1-f', 'us-east1-b', 'us-east1-c', 'us-east1-d'], description: 'Choose Zone: Zone is permanent choose carefully'),
                             string(defaultValue: 'auto-instance', name: 'INSTANCE_NAME', trim: true),
                             choice(defaultValue: 'e2-small', name: 'INSTANCE_TYPE', choices: ['e2-micro', 'e2-small', 'e2-medium'], description: 'Choose Instance Type: Micro=1GB, Small=2GB, Medium=4GB'),
-                            choice(defaultValue: 'debian-cloud/debian-11', name: 'INSTANCE_OS', choices: ['debian-cloud/debian-11', 'ubuntu-os-cloud/ubuntu-2004-lts', 'windows-cloud/windows-server-2019-dc'], description: 'Choose Instance OS: Minimum size Linux=10GB, Windows=50GB'),
+                            choice(defaultValue: 'debian-11', name: 'INSTANCE_OS', choices: ['debian-11', 'ubuntu-2004-lts', 'windows-server-2019-dc-v20240819'], description: 'Choose Instance OS: Minimum size Linux=10GB, Windows=50GB'),
                             string(defaultValue: '10', name: 'DISK_SIZE', trim: true),
                             string(defaultValue: '5', name: 'INSTANCE_COUNT', trim: true),
                             string(defaultValue: 'default', name: 'VPC_NAME', trim: true),
@@ -40,6 +40,9 @@ pipeline {
         }
 
         stage("Terraform Variables Setup") {
+            when {
+                expression { params.ACTION == 'init' }
+            }
             steps {
                 script {
                     sh '''
@@ -120,7 +123,6 @@ pwd
                     dir('terraform') {
                         withCredentials([file(credentialsId: 'gcp-credentials-json', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
                             // Set the GOOGLE_APPLICATION_CREDENTIALS environment variable and run Terraform apply
-                                // export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
                             sh '''
                                 export TF_VAR_google_application_credentials=$GOOGLE_APPLICATION_CREDENTIALS
                                 terraform apply -auto-approve -state=${TERRAFORM_STATE_PATH} --var-file=terraform-${ACTION}-${BUILD_NUMBER}.tfvars -no-color
@@ -142,10 +144,8 @@ pwd
                         sh 'terraform init'
 
                         // Destroy Terraform-managed infrastructure
-                        // sh "terraform destroy -var 'google_application_credentials=${GOOGLE_APPLICATION_CREDENTIALS}' -auto-approve -state=${TERRAFORM_STATE_PATH}"
                         withCredentials([file(credentialsId: 'gcp-credentials-json', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
                             // Set the GOOGLE_APPLICATION_CREDENTIALS environment variable and run Terraform apply
-                                // export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
                             sh '''
                                 export TF_VAR_google_application_credentials=$GOOGLE_APPLICATION_CREDENTIALS
                                 terraform destroy -auto-approve -state=${TERRAFORM_STATE_PATH} --var-file=terraform-${ACTION}-${BUILD_NUMBER}.tfvars -no-color
