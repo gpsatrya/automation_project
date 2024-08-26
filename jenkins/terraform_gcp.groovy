@@ -45,7 +45,7 @@ pipeline {
                     sh '''
 cat <<EOF > ./terraform/terraform-${ACTION}-${BUILD_NUMBER}.tfvars
 ### For General Value
-gcp_project     = "${ID_PROJECT}"
+id_project     = "${ID_PROJECT}"
 region          = "${REGION}"
 zone            = "${ZONE}"
 
