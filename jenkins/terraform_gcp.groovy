@@ -7,6 +7,8 @@ pipeline {
 
     environment {
         GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-credentials-json')
+        TERRAFORM_STATE_PATH = '/home/gsatrya/terraform_state/terraform.tfstate'
+        GPG_KEY_ID = 'gsatrya'
     }
 
     stages {
@@ -18,12 +20,21 @@ pipeline {
             }
         }
 
+        stage('Setup') {
+            steps {
+                script {
+                    // Decrypt the state file before running Terraform
+                    sh "gpg --output ${TERRAFORM_STATE_PATH} --decrypt ${TERRAFORM_STATE_PATH}.gpg"
+                }
+            }
+        }
+
         stage('Terraform Init') {
             steps {
                 script {
                     dir('terraform') {
-                        // Initialize Terraform
-                        sh 'terraform init'
+                        // Initialize Terraform with the backend state path
+                        sh "terraform init -backend-config='path=${TERRAFORM_STATE_PATH}'"
                     }
                 }
             }
@@ -38,7 +49,7 @@ pipeline {
                     // Navigate to the directory containing main.tf
                     dir('terraform') {
                         // Apply Terraform configuration to create VM
-                        sh "terraform apply -var 'google_application_credentials=${GOOGLE_APPLICATION_CREDENTIALS}' -auto-approve"
+                        sh "terraform apply -var 'google_application_credentials=${GOOGLE_APPLICATION_CREDENTIALS}' -auto-approve -state=${TERRAFORM_STATE_PATH}"
                     }
                 }
             }
@@ -55,8 +66,19 @@ pipeline {
                         sh 'terraform init'
 
                         // Destroy Terraform-managed infrastructure
-                        sh "terraform destroy -var 'google_application_credentials=${GOOGLE_APPLICATION_CREDENTIALS}' -auto-approve"
+                        sh "terraform destroy -var 'google_application_credentials=${GOOGLE_APPLICATION_CREDENTIALS}' -auto-approve -state=${TERRAFORM_STATE_PATH}"
                     }
+                }
+            }
+        }
+
+        stage('Cleanup') {
+            steps {
+                script {
+                    // Encrypt the state file after running Terraform
+                    sh "gpg --output ${TERRAFORM_STATE_PATH}.gpg --encrypt --recipient ${GPG_KEY_ID} ${TERRAFORM_STATE_PATH}"
+                    // Remove the unencrypted state file
+                    sh "rm ${TERRAFORM_STATE_PATH}"
                 }
             }
         }

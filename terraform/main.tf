@@ -1,3 +1,9 @@
+terraform {
+  backend "local" {
+    path = "../../terraform_state/terraform.tfstate"
+  }
+}
+
 provider "google" {
   credentials = file(var.google_application_credentials)
   project     = "panji-sandbox"
