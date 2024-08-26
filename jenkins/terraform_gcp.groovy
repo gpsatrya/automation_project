@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-credentials-json')
+        // GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-credentials-json')
         TERRAFORM_STATE_PATH = '/var/terraform_state/terraform.tfstate'
     }
 
@@ -69,8 +69,13 @@ pipeline {
                 script {
                     // Navigate to the directory containing main.tf
                     dir('terraform') {
-                        // Apply Terraform configuration to create VM
-                        sh "terraform apply -var 'google_application_credentials=${GOOGLE_APPLICATION_CREDENTIALS}' -auto-approve -state=${TERRAFORM_STATE_PATH}"
+                        withCredentials([file(credentialsId: 'gcp-credentials-json', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                            // Set the GOOGLE_APPLICATION_CREDENTIALS environment variable and run Terraform apply
+                            sh """
+                                export GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+                                terraform apply -auto-approve -state=${TERRAFORM_STATE_PATH}
+                            """
+                        }
                     }
                 }
             }
@@ -97,7 +102,6 @@ pipeline {
     post {
         always {
             // Langkah-langkah yang selalu dilakukan, terlepas dari status pipeline
-            echo 'This will always run'
             cleanWs()  // Clean workspace after build
         }
         success {
