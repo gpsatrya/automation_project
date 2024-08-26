@@ -33,6 +33,7 @@ pipeline {
 
         stage('Clone Repository') {
             steps {
+                cleanWs()  // Clean workspace after build
                 //cloning repo
                 sh 'git config --global http.sslVerify false'
                 git branch:'main', credentialsId: 'credential-github', url: 'https://github.com/gpsatrya/automation_project.git'
@@ -160,7 +161,7 @@ pwd
     post {
         always {
             // Langkah-langkah yang selalu dilakukan, terlepas dari status pipeline
-            cleanWs()  // Clean workspace after build
+            
         }
         success {
             // Langkah-langkah yang dilakukan jika pipeline sukses
