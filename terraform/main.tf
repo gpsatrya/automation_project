@@ -1,12 +1,3 @@
-data "google_compute_network" "network_vpc" {
-  name   = var.vpc_name
-}
-
-data "google_compute_subnetwork" "subnet" {
-  name   = var.subnet_name
-  region = var.region 
-}
-
 resource "google_compute_instance" "instance" {
   count         = var.instance_count
   name          = "${var.instance_name}-${count.index}"

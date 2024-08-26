@@ -47,6 +47,7 @@ variable "instance_count" {
 }
 
 ## For VPC Network
+/*
 variable "vpc_name" {
   description = "For VPC network name"
   type        = string
@@ -57,3 +58,4 @@ variable "subnet_name" {
   description = "For Subnet name"
   type        = string
 }
+*/
