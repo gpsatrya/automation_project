@@ -161,7 +161,7 @@ pwd
     post {
         always {
             // Langkah-langkah yang selalu dilakukan, terlepas dari status pipeline
-            
+            echo 'Pipeline always executed!'
         }
         success {
             // Langkah-langkah yang dilakukan jika pipeline sukses
