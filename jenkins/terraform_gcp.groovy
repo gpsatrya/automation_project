@@ -43,7 +43,6 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    pwd
 cat <<EOF > terraform-${ACTION}-${BUILD_NUMBER}.tfvars
 ### For General Value
 gcp_project     = "${ID_PROJECT}"
@@ -65,8 +64,7 @@ subnet_name     = "${SUBNET_NAME}"
 EOF
 '''.stripIndent()
                     sh '''
-                    pwd
-cat terraform-${BUILD_NUMBER}.tfvars
+cat terraform-${ACTION}-${BUILD_NUMBER}.tfvars
 '''
                     sh '''
 ls -la
