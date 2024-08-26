@@ -44,28 +44,27 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    cat <<EOF > ./terraform/terraform-${ACTION}-${BUILD_NUMBER}.tfvars
-                    ### For General Value
-                    id_project      = "${ID_PROJECT}"
-                    region          = "${REGION}"
-                    zone            = "${ZONE}"
+cat <<EOF > ./terraform/terraform-${ACTION}-${BUILD_NUMBER}.tfvars
+### For General Value
+id_project      = "${ID_PROJECT}"
+region          = "${REGION}"
+zone            = "${ZONE}"
 
-                    ### For Compute Engine Value
-                    instance_name   = "${INSTANCE_NAME}"
-                    instance_os     = "${INSTANCE_OS}"
-                    instance_type   = "${INSTANCE_TYPE}"
-                    disk_size       = "${DISK_SIZE}"
-                    instance_count  = "${INSTANCE_COUNT}"
-                    EOF
-                    '''.stripIndent()
-
+### For Compute Engine Value
+instance_name   = "${INSTANCE_NAME}"
+instance_os     = "${INSTANCE_OS}"
+instance_type   = "${INSTANCE_TYPE}"
+disk_size       = "${DISK_SIZE}"
+instance_count  = "${INSTANCE_COUNT}"
+EOF
+'''.stripIndent()
                     sh '''
-                    cat ./terraform/terraform-${ACTION}-${BUILD_NUMBER}.tfvars
-                    '''
+cat ./terraform/terraform-${ACTION}-${BUILD_NUMBER}.tfvars
+'''
                     sh '''
-                    ls -la
-                    pwd
-                    '''
+ls -la
+pwd
+'''
                 }
             }
         }
