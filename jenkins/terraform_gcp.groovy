@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-credentials-json')
-        TERRAFORM_STATE_PATH = '/home/gsatrya/terraform_state/terraform.tfstate'
+        TERRAFORM_STATE_PATH = '/var/terraform_state/terraform.tfstate'
         GPG_KEY_ID = 'gsatrya'
     }
 
@@ -23,6 +23,7 @@ pipeline {
         stage('Setup') {
             steps {
                 script {
+                    sh 'ls ../../'
                     // Decrypt the state file before running Terraform
                     sh "gpg --output ${TERRAFORM_STATE_PATH} --decrypt ${TERRAFORM_STATE_PATH}.gpg"
                 }
@@ -32,6 +33,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 script {
+                    sh 'pwd'
                     dir('terraform') {
                         // Initialize Terraform with the backend state path
                         sh "terraform init -backend-config='path=${TERRAFORM_STATE_PATH}'"
