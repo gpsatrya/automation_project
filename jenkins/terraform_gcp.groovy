@@ -71,10 +71,10 @@ pipeline {
                     dir('terraform') {
                         withCredentials([file(credentialsId: 'gcp-credentials-json', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
                             // Set the GOOGLE_APPLICATION_CREDENTIALS environment variable and run Terraform apply
-                            sh """
-                                export GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+                            sh '''
+                                export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
                                 terraform apply -auto-approve -state=${TERRAFORM_STATE_PATH}
-                            """
+                            '''
                         }
                     }
                 }
