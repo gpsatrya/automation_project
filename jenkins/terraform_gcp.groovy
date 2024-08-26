@@ -40,6 +40,21 @@ pipeline {
             }
         }
 
+        // stage('Terraform Plan') {
+        //     when {
+        //         expression { params.ACTION == 'plan' }
+        //     }
+        //     steps {
+        //         script {
+        //             // Navigate to the directory containing main.tf
+        //             dir('terraform') {
+        //                 // Plan Terraform configuration
+        //                 sh "terraform plan -state=${TERRAFORM_STATE_PATH}"
+        //             }
+        //         }
+        //     }
+        // }
+
         stage('Terraform Apply') {
             when {
                 expression { params.ACTION == 'init' }
