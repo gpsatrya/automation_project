@@ -98,7 +98,7 @@ pipeline {
         always {
             // Langkah-langkah yang selalu dilakukan, terlepas dari status pipeline
             echo 'This will always run'
-            // cleanWs()  // Clean workspace after build
+            cleanWs()  // Clean workspace after build
         }
         success {
             // Langkah-langkah yang dilakukan jika pipeline sukses
