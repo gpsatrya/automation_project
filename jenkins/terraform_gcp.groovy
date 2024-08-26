@@ -19,6 +19,21 @@ pipeline {
             }
         }
 
+        stage('Check State File') {
+            steps {
+                script {
+                    // Check if the terraform.tfstate file exists in the mounted volume
+                    sh """
+                        if [ -f ${TERRAFORM_STATE_PATH} ]; then
+                            echo "State file exists at ${TERRAFORM_STATE_PATH}"
+                        else
+                            echo "State file does not exist at ${TERRAFORM_STATE_PATH}"
+                        fi
+                    """
+                }
+            }
+        }
+
         stage('Terraform Init') {
             steps {
                 script {
@@ -77,22 +92,13 @@ pipeline {
                 }
             }
         }
-
-        stage('Cleanup') {
-            steps {
-                script {
-                    // Remove the unencrypted state file
-                    sh "rm ${TERRAFORM_STATE_PATH}"
-                }
-            }
-        }
     }
 
     post {
         always {
             // Langkah-langkah yang selalu dilakukan, terlepas dari status pipeline
             echo 'This will always run'
-            cleanWs()  // Clean workspace after build
+            // cleanWs()  // Clean workspace after build
         }
         success {
             // Langkah-langkah yang dilakukan jika pipeline sukses
