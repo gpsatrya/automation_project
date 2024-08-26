@@ -1,35 +1,34 @@
-terraform {
-  backend "local" {
-    path = "../../terraform_state/terraform.tfstate"
-  }
+data "google_compute_network" "network_vpc" {
+  name   = var.vpc_name
 }
 
-provider "google" {
-  credentials = file(var.google_application_credentials)
-  project     = "panji-sandbox"
-  region      = "us-central1"
-}
-
-variable "google_application_credentials" {
-  description = "Path to the Google Cloud service account key file"
-  type        = string
+data "google_compute_subnetwork" "subnet" {
+  name   = var.subnet_name
+  region = var.region 
 }
 
 resource "google_compute_instance" "default" {
-  name         = "automate-instance-1"
-  machine_type = "e2-small"
-  zone         = "us-central1-a"
+  count         = var.instance_count
+  name          = "var.instance_name"
+  machine_type  = var.instance_type
+  zone          = var.zone
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-11"
+      image = var.instance_os
     }
   }
 
   network_interface {
-    network = "default"
-    access_config {
+    // network = "default"
+    // access_config {
       // Include this section to give the VM a public IP address
+    // }
+    network     = data.google_compute_network.network_vpc.id
+    subnetwork  = data.google_compute_subnetwork.subnet.id
+
+    access_config {
+        network_tier = "STANDARD"
     }
   }
 
