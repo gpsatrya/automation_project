@@ -55,12 +55,6 @@ instance_os     = "${INSTANCE_OS}"
 instance_type   = "${INSTANCE_TYPE}"
 disk_size       = "${DISK_SIZE}"
 instance_count  = "${INSTANCE_COUNT}"
-
-### For VPC Network Value
-vpc_name        = "${VPC_NAME}"
-
-### For Subnet Value
-subnet_name     = "${SUBNET_NAME}"
 EOF
 '''.stripIndent()
                     sh '''
