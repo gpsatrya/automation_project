@@ -70,6 +70,9 @@ pipeline {
                     dir('terraform') {
                         // Initialize Terraform (necessary before destroy)
                         sh 'terraform init'
+
+                        // Destroy Terraform-managed infrastructure
+                        sh "terraform destroy -var 'google_application_credentials=${GOOGLE_APPLICATION_CREDENTIALS}' -auto-approve -state=${TERRAFORM_STATE_PATH}"
                     }
                 }
             }
