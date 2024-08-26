@@ -7,42 +7,50 @@ variable "google_application_credentials" {
 variable "id_project" {
   description = "Project ID"
   type        = string
+  default     = ""
 }
 
 variable "region" {
   description = "GCP region"
   type        = string
+  default     = ""
 }
 
 variable "zone" {
   description = "For GCP workload region"
   type        = string
+  default     = ""
 }
 
 ## For Compute Engine
 variable "instance_name" {
   description = "For google compute instance name"
   type        = string
+  default     = ""
 }
 
 variable "instance_type" {
   description = "Compute Instance machine type"
   type        = string
+  default     = ""
 }
 
 variable "instance_os" {
   description = "Google compute engine OS"
   type        = string
+  default     = ""
 }
 
 variable "disk_size" {
   description = "disk for compute engine"
   type        = string
+  default     = ""
 }
 
 variable "instance_count" {
   description = "Number of instance"
   type        = number
+  default     = 0
   
 }
 
