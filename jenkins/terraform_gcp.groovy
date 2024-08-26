@@ -24,7 +24,8 @@ pipeline {
             steps {
                 script {
                     sh 'pwd'
-                    sh 'ls ../../../../'
+                    sh 'ls ../../../../terraform_state'
+                    sh 'ls /var/'
                     // Decrypt the state file before running Terraform
                     sh "gpg --output ${TERRAFORM_STATE_PATH} --decrypt ${TERRAFORM_STATE_PATH}.gpg"
                 }
