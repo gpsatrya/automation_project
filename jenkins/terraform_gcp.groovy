@@ -14,10 +14,10 @@ pipeline {
                         parameters ([
                             choice(name: 'ACTION', choices: ['init', 'destroy'], description: 'Choose action: init to create VM or destroy to delete VM'),
                             string(defaultValue: 'panji-sandbox', name: 'ID_PROJECT', trim: true),
-                            choice(name: 'REGION', choices: ['us-central1', 'us-east1'], defaultValue: 'us-central1', description: 'Choose Region: Region is permanent choose carefully'),
-                            choice(name: 'ZONE', choices: ['us-central1-a', 'us-central1-b', 'us-central1-c', 'us-central1-f', 'us-east1-b', 'us-east1-c', 'us-east1-d'], defaultValue: 'us-central1-a', description: 'Choose Zone: Zone is permanent choose carefully'),
+                            choice(defaultValue: 'us-central1', name: 'REGION', choices: ['us-central1', 'us-east1'], description: 'Choose Region: Region is permanent choose carefully'),
+                            choice(defaultValue: 'us-central1-a', name: 'ZONE', choices: ['us-central1-a', 'us-central1-b', 'us-central1-c', 'us-central1-f', 'us-east1-b', 'us-east1-c', 'us-east1-d'], description: 'Choose Zone: Zone is permanent choose carefully'),
                             string(defaultValue: 'auto-instance', name: 'INSTANCE_NAME', trim: true),
-                            choice(name: 'INSTANCE_TYPE', choices: ['e2-micro', 'e2-small', 'e2-medium'], defaultValue: 'e2-small', description: 'Choose Instance Type: Micro=1GB, Small=2GB, Medium=4GB'),
+                            choice(defaultValue: 'e2-small', name: 'INSTANCE_TYPE', choices: ['e2-micro', 'e2-small', 'e2-medium'], description: 'Choose Instance Type: Micro=1GB, Small=2GB, Medium=4GB'),
                             choice(defaultValue: 'debian-cloud/debian-11', name: 'INSTANCE_OS', choices: ['debian-cloud/debian-11', 'ubuntu-os-cloud/ubuntu-2004-lts', 'windows-cloud/windows-server-2019-dc'], description: 'Choose Instance OS: Minimum size Linux=10GB, Windows=50GB'),
                             string(defaultValue: '10', name: 'DISK_SIZE', trim: true),
                             string(defaultValue: '5', name: 'INSTANCE_COUNT', trim: true),
@@ -43,6 +43,7 @@ pipeline {
             steps {
                 script {
                     sh '''
+                    pwd
 cat <<EOF > terraform-${ACTION}-${BUILD_NUMBER}.tfvars
 ### For General Value
 gcp_project     = "${ID_PROJECT}"
@@ -64,6 +65,7 @@ subnet_name     = "${SUBNET_NAME}"
 EOF
 '''.stripIndent()
                     sh '''
+                    pwd
 cat terraform-${BUILD_NUMBER}.tfvars
 '''
                     sh '''
