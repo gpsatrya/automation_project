@@ -129,7 +129,7 @@ pwd
                                 // export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
                             sh '''
                                 export TF_VAR_google_application_credentials=$GOOGLE_APPLICATION_CREDENTIALS
-                                terraform apply -auto-approve -state=${TERRAFORM_STATE_PATH} --var-file=./terraform/terraform-${ACTION}-${BUILD_NUMBER}.tfvars -no-color
+                                terraform apply -auto-approve -state=${TERRAFORM_STATE_PATH} --var-file=terraform-${ACTION}-${BUILD_NUMBER}.tfvars -no-color
                             '''
                         }
                     }
@@ -154,7 +154,7 @@ pwd
                                 // export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
                             sh '''
                                 export TF_VAR_google_application_credentials=$GOOGLE_APPLICATION_CREDENTIALS
-                                terraform destroy -auto-approve -state=${TERRAFORM_STATE_PATH} --var-file=./terraform/terraform-${ACTION}-${BUILD_NUMBER}.tfvars -no-color
+                                terraform destroy -auto-approve -state=${TERRAFORM_STATE_PATH} --var-file=terraform-${ACTION}-${BUILD_NUMBER}.tfvars -no-color
                             '''
                         }
                     }
