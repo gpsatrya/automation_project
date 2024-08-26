@@ -24,14 +24,8 @@ resource "google_compute_instance" "instance" {
   network_interface {
     network = "default"
     access_config {
-      Include this section to give the VM a public IP address
+      // Include this section to give the VM a public IP address
     }
-    //network     = data.google_compute_network.network_vpc.id
-    //subnetwork  = data.google_compute_subnetwork.subnet.id
-
-    //access_config {
-    //    network_tier = "STANDARD"
-    //}
   }
 
   // Metadata startup script for automatic shutdown
