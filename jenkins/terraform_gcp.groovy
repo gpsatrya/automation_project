@@ -126,7 +126,7 @@ pwd
                             // Set the GOOGLE_APPLICATION_CREDENTIALS environment variable and run Terraform apply
                             sh '''
                                 export TF_VAR_google_application_credentials=$GOOGLE_APPLICATION_CREDENTIALS
-                                terraform apply -auto-approve -state=${TERRAFORM_STATE_PATH}
+                                terraform apply -auto-approve -state=${TERRAFORM_STATE_PATH} --var-file=terraform-${ACTION}-${BUILD_NUMBER}.tfvars -no-color
                             '''
                         }
                     }
@@ -149,7 +149,7 @@ pwd
                             // Set the GOOGLE_APPLICATION_CREDENTIALS environment variable and run Terraform apply
                             sh '''
                                 export TF_VAR_google_application_credentials=$GOOGLE_APPLICATION_CREDENTIALS
-                                terraform destroy -auto-approve -state=${TERRAFORM_STATE_PATH} --var-file=terraform-${ACTION}-${BUILD_NUMBER}.tfvars -no-color
+                                terraform destroy -auto-approve -state=${TERRAFORM_STATE_PATH}
                             '''
                         }
                     }
