@@ -41,9 +41,6 @@ pipeline {
         }
 
         stage("Terraform Variables Setup") {
-            when {
-                expression { params.ACTION == 'init' }
-            }
             steps {
                 script {
                     sh '''
@@ -149,7 +146,7 @@ pwd
                             // Set the GOOGLE_APPLICATION_CREDENTIALS environment variable and run Terraform apply
                             sh '''
                                 export TF_VAR_google_application_credentials=$GOOGLE_APPLICATION_CREDENTIALS
-                                terraform destroy -auto-approve -state=${TERRAFORM_STATE_PATH}
+                                terraform destroy -auto-approve -state=${TERRAFORM_STATE_PATH} --var-file=terraform-${ACTION}-${BUILD_NUMBER}.tfvars -no-color
                             '''
                         }
                     }
