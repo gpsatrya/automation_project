@@ -43,7 +43,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-cat <<EOF > terraform-${ACTION}-${BUILD_NUMBER}.tfvars
+cat <<EOF > ./terraform/terraform-${ACTION}-${BUILD_NUMBER}.tfvars
 ### For General Value
 gcp_project     = "${ID_PROJECT}"
 region          = "${REGION}"
@@ -64,7 +64,7 @@ subnet_name     = "${SUBNET_NAME}"
 EOF
 '''.stripIndent()
                     sh '''
-cat terraform-${ACTION}-${BUILD_NUMBER}.tfvars
+cat ./terraform/terraform-${ACTION}-${BUILD_NUMBER}.tfvars
 '''
                     sh '''
 ls -la
@@ -129,7 +129,7 @@ pwd
                                 // export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
                             sh '''
                                 export TF_VAR_google_application_credentials=$GOOGLE_APPLICATION_CREDENTIALS
-                                terraform apply -auto-approve -state=${TERRAFORM_STATE_PATH}
+                                terraform apply -auto-approve -state=${TERRAFORM_STATE_PATH} --var-file=./terraform/terraform-${ACTION}-${BUILD_NUMBER}.tfvars -no-color
                             '''
                         }
                     }
@@ -154,7 +154,7 @@ pwd
                                 // export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
                             sh '''
                                 export TF_VAR_google_application_credentials=$GOOGLE_APPLICATION_CREDENTIALS
-                                terraform destroy -auto-approve -state=${TERRAFORM_STATE_PATH}
+                                terraform destroy -auto-approve -state=${TERRAFORM_STATE_PATH} --var-file=./terraform/terraform-${ACTION}-${BUILD_NUMBER}.tfvars -no-color
                             '''
                         }
                     }
